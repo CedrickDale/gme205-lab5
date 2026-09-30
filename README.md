@@ -79,7 +79,7 @@ Each rule reports its own name, whether the parcel passed, and a short explanati
 **Implementation** comes last: the design is translated into Python only after the UML diagram is complete.
  
 ### Candidate classes
- 
+
 | Phrase from the problem | Initial interpretation | Keep as a class? | Reason |
 |---|---|---|---|
 | Planning team | Actor / stakeholder | No | The team uses the program but is not part of the domain being modeled. |
@@ -91,9 +91,12 @@ Each rule reports its own name, whether the parcel passed, and a short explanati
 | Assessment rule | Behavioral abstraction | Yes | `AssessmentRule` defines the `evaluate(parcel)` contract shared by every rule. |
 | Minimum area rule | Specialized rule | Yes | `MinimumAreaRule` owns the area threshold and the behavior that checks it. |
 | Allowed zone rule | Specialized rule | Yes | `AllowedZoneRule` owns the set of allowed zones and the behavior that checks a parcel's zone. |
-| Hazard intersection rule | Specialized rule | Yes | `NoHazardOverlapRule` uses a `HazardZone` and passes only when the parcel does not intersect it. |
+| Hazard intersection rule | Specialized rule | Yes | `NoHazardOverlapRule` uses one `HazardZone` and passes only when the parcel does not intersect it. |
 | Rule result | Value object | Yes | `RuleResult` gives every rule one consistent way to return its name, decision, and explanation. |
 | Parcel assessment | Coordinator | Yes | It is discovered from the phrase "runs every rule" and keeps the loop out of the rules and the runner. |
+| Geometry | Spatial attribute | No new class | `Parcel` and `HazardZone` store Shapely geometry objects; this exercise does not require a new geometry class. |
+| Minimum area threshold | Rule configuration | No | It is a number stored by `MinimumAreaRule`, while the rule class owns the evaluation behavior. |
+| Allowed zones | Rule configuration | No | They form a set stored by `AllowedZoneRule`, rather than a separate object with its own responsibility. |
 | Report | Output representation | Not yet | A dictionary written to JSON is enough; a `Report` class would add little responsibility. |
  
 ### Actions and responsibilities
@@ -105,3 +108,4 @@ Each rule reports its own name, whether the parcel passed, and a short explanati
 | Run every rule for a parcel | `ParcelAssessment` | It owns the iteration and combines the results. |
 | Store a decision and its explanation | `RuleResult` | Holds the rule name, passed flag, and message returned by a rule. |
 | Add a new development condition | A new `AssessmentRule` subclass | It follows the same `evaluate(parcel)` contract, so the assessment loop is unchanged. |
+
