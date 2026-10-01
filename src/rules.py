@@ -70,3 +70,21 @@ class NoHazardOverlapRule(AssessmentRule):
         )
 
         return RuleResult(self.name, passed, message)
+
+class RoadAccessRule(AssessmentRule):
+    def __init__(self, road, max_distance):
+        super().__init__("Road access")
+        self._road = road
+        self._max_distance = float(max_distance)
+
+    def evaluate(self, parcel) -> RuleResult:
+        distance = parcel.geometry.distance(self._road.geometry)
+        passed = distance <= self._max_distance
+
+        message = (
+            f"Distance to road '{self._road.road_id}' is "
+            f"{distance:.2f} units; maximum allowed is "
+            f"{self._max_distance:.2f} units"
+        )
+
+        return RuleResult(self.name, passed, message)

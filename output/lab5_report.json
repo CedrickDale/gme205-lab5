@@ -19,6 +19,11 @@
                     "rule_name": "No hazard overlap",
                     "passed": false,
                     "message": "Parcel intersects hazard zone 'HZ-01'"
+                },
+                {
+                    "rule_name": "Road access",
+                    "passed": true,
+                    "message": "Distance to road 'R-001' is 20.00 units; maximum allowed is 30.00 units"
                 }
             ]
         },
@@ -40,6 +45,11 @@
                     "rule_name": "No hazard overlap",
                     "passed": true,
                     "message": "Parcel does not intersect hazard zone 'HZ-01'"
+                },
+                {
+                    "rule_name": "Road access",
+                    "passed": true,
+                    "message": "Distance to road 'R-001' is 20.00 units; maximum allowed is 30.00 units"
                 }
             ]
         }

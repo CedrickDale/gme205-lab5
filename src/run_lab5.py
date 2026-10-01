@@ -2,11 +2,15 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from shapely.geometry import box
-
-from spatial import Parcel, HazardZone
-from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule
+from shapely.geometry import box, LineString
 from assessment import ParcelAssessment
+from spatial import Parcel, HazardZone, Road
+from rules import (
+    MinimumAreaRule,
+    AllowedZoneRule,
+    NoHazardOverlapRule,
+    RoadAccessRule,
+)
 
 
 def main():
@@ -24,6 +28,11 @@ def main():
         5600,
     )
 
+    road = Road(
+        "R-001",
+        LineString([(0, -20), (200, -20)]),
+    )
+
     hazard = HazardZone(
         "HZ-01",
         box(60, 50, 110, 100),
@@ -35,6 +44,7 @@ def main():
         MinimumAreaRule(5000),
         AllowedZoneRule({"Residential", "Commercial"}),
         NoHazardOverlapRule(hazard),
+        RoadAccessRule(road, 30),
     ]
 
     report = {
