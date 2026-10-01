@@ -1,6 +1,7 @@
 from shapely.geometry import box
 from spatial import Parcel, HazardZone
 from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule
+from assessment import ParcelAssessment
 
 
 # Create a parcel and a separate hazard zone.
@@ -25,10 +26,6 @@ rules = [
     NoHazardOverlapRule(hazard),
 ]
 
-for rule in rules:
-    result = rule.evaluate(parcel)
-    print(f"{result.rule_name}: {result.passed} — {result.message}")
-
 # Check encapsulation.
 try:
     parcel.area_sqm = -100
@@ -40,3 +37,13 @@ try:
     Parcel("P002", box(0, 0, 10, 10), "Residential", -100)
 except ValueError as error:
     print(f"Validation check: {error}")
+
+assessment = ParcelAssessment(parcel, rules)
+results = assessment.evaluate()
+
+print("\nAssessment results:")
+for result in results:
+    print(f"{result.rule_name}: {result.passed} — {result.message}")
+
+overall_passed = all(result.passed for result in results)
+print(f"Overall passed: {overall_passed}")
